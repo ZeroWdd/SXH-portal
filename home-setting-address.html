@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>设置-个人信息</title>
+     <link rel="icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+</head>
+
+<body>
+   	<!--页面顶部白条条，由js动态加载-->
+	<script type="text/javascript" src="plugins/jquery/jquery.min.js"></script>
+	<div class="nav-bottom"></div>
+    <script type="text/javascript">$(".nav-bottom").load("top.html");</script>
+
+<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+// $(function(){
+// 	$("#service").hover(function(){
+// 		$(".service").show();
+// 	},function(){
+// 		$(".service").hide();
+// 	});
+// 	$("#shopcar").hover(function(){
+// 		$("#shopcarlist").show();
+// 	},function(){
+// 		$("#shopcarlist").hide();
+// 	});
+
+// })
+</script>
+<script src="./js/vue/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/common.js"></script>
+<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+<script type="text/javascript" src="js/widget/nav.js"></script>
+<script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
+<script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
+<script type="text/javascript" src="js/plugins/citypicker/picker.data.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</body>
+    <!--header-->
+    <div id="account">
+        <div class="py-container">
+            <div class="yui3-g home">
+                <!--左侧列表-->
+                <div class="yui3-u-1-6 list">
+
+                    <div class="person-info">
+                        <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
+                        <div class="person-account">
+                            <span class="name">Michelle</span>
+                            <span class="safe">账户安全</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="list-items">
+                        <dl>
+							<dt><i>·</i> 订单中心</dt>
+							<dd ><a href="home-index.html"   >我的订单</a></dd>
+							<dd><a href="home-order-pay.html" >待付款</a></dd>
+							<dd><a href="home-order-send.html"  >待发货</a></dd>
+							<dd><a href="home-order-receive.html" >待收货</a></dd>
+							<dd><a href="home-order-evaluate.html" >待评价</a></dd>
+						</dl>
+						<dl>
+							<dt><i>·</i> 我的中心</dt>
+							<dd><a href="home-person-collect.html" >我的收藏</a></dd>
+							<dd><a href="home-person-footmark.html" >我的足迹</a></dd>
+						</dl>
+						<dl>
+							<dt><i>·</i> 物流消息</dt>
+						</dl>
+						<dl>
+							<dt><i>·</i> 设置</dt>
+							<dd><a href="home-setting-info.html" >个人信息</a></dd>
+							<dd><a href="home-setting-address.html" class="list-active" >地址管理</a></dd>
+							<dd><a href="home-setting-safe.html" >安全管理</a></dd>
+						</dl>
+                    </div>
+                </div>
+                <!--右侧主内容-->
+                <div class="yui3-u-5-6">
+                    <div class="body userAddress">
+                        <div class="address-title">
+                            <span class="title">地址管理</span>
+                            <a @click="address={},workarea=[]"  data-toggle="modal" data-target=".edit" data-keyboard="false" class="sui-btn  btn-info add-new">添加新地址</a>
+                            <span class="clearfix"></span>
+                        </div>
+                        <div class="address-detail">
+                            <table class="sui-table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>地址</th>
+                                        <th>联系电话</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(address,index) in addresses">
+                                        <td>{{address.receiver}}</td>
+                                        <td>{{address.receiverState + address.receiverCity + address.receiverDistrict + address.receiverAddress }}</td>
+                                        <td>{{address.receiverMobile}}</td>
+                                        <td>
+                                            <a data-toggle="modal" data-target=".edit" data-keyboard="false" @click="showEdit(address,index)">编辑</a>
+                                            <a @click="deleteAddress(address,index)">删除</a>
+                                            <div v-if="address.receiverDefault == 1">默认地址</div>
+                                            <a v-else @click="editStatus(address,index)">设为默认地址</a>
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>                          
+                        </div>
+                        <!--新增地址弹出层-->
+                         <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit" style="width:580px;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                                        <h4 id="myModalLabel" class="modal-title">新增地址</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="" class="sui-form form-horizontal">
+                                            <div class="control-group">
+                                            <label class="control-label">收货人：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" :value="address.receiver" @input="address.receiver = $event.target.value">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">所在地区：</label>
+                                            <div class="controls">
+                                                <el-cascader style="height: 30px;" size="medium" v-model="workarea" :options="options" clearable></el-cascader>
+                                                <span>{{showAddress}}</s>
+                                            </div>									 
+                                        </div>
+                                    
+                                        <div class="control-group">
+                                            <label class="control-label">详细地址：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-large" :value="address.receiverAddress" @input="address.receiverAddress = $event.target.value">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">联系电话：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" :value="address.receiverMobile" @input="address.receiverMobile = $event.target.value">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">邮编：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" :value="address.receiverZip" @input="address.receiverZip = $event.target.value">
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        </form>
+                                        
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" @click="submit()">确定</button>
+                                        <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<!-- 底部栏位 -->
+	<!--页面底部，由js动态加载-->
+	<div class="clearfix footer"></div>
+	<script type="text/javascript">$(".footer").load("foot.html");</script>
+    <!--页面底部END-->
+    
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#account",
+            data: {
+                address : {
+                    addressId : 0,
+                    receiver : "",
+                    receiverAddress : "",
+                    receiverMobile : "",
+                    receiverZip : "",
+                    receiverState : "",
+                    receiverCity : "",
+                    receiverDistrict : "",
+                    receiverDefault : 0
+                },
+                addresses : [
+
+                ],
+                options : areajson,
+                workarea: ["", "", ""],
+                showAddress : [],
+                edit : false,
+                index : -1,
+            },
+            created() {
+                ly.http.get("/auth/verify").then(() => {
+                    leyou.http.get("/order/address")
+                        .then(resp => {
+                            this.addresses = resp.data;
+                        }
+                    );
+                }).catch(rep => {
+                    gotoLogin()
+                })
+            },
+            methods: {
+                gotoLogin() {
+                    window.location = "login.html?returnUrl=" + window.location;
+                },
+                submit(){
+                    // 三级联动确定 省市县
+                    for(let i in this.options){
+                        if(Number(this.options[i].value) == Number(this.workarea[0])){
+                            this.address.receiverState = this.options[i].label;
+                        }
+                        for(let k in this.options[i].children){
+                            if(Number(this.options[i].children[k].value) == Number(this.workarea[1])){
+                                this.address.receiverCity = this.options[i].children[k].label;
+                            }
+                            for(let j in this.options[i].children[k].children){
+                                if(Number(this.options[i].children[k].children[j].value) == Number(this.workarea[2])){
+                                    this.address.receiverDistrict = this.options[i].children[k].children[j].label;
+                                }        
+                            }
+                        }
+                    }
+                    if(this.edit){
+                        leyou.http.put("/order/address",this.address)
+                            .then(resp => {
+                                this.addresses.splice(this.index,1);
+                                this.address.addressId = resp;
+                                this.addresses.push(this.address)
+                                this.$message({
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
+                                this.index = -1;
+                            }
+                        );
+                        this.edit = false;
+                    }else{
+                        leyou.http.post("/order/address",this.address)
+                            .then(resp => {
+                                this.address.addressId = resp;
+                                this.addresses.push(this.address)
+                                this.$message({
+                                    message: '添加成功',
+                                    type: 'success'
+                                });
+                            }
+                        );
+                    }
+                    
+                },
+                deleteAddress(address,index){
+                    this.$confirm('确认删除吗？')
+                        .then(_ => {
+                            leyou.http.delete("/order/address/" + address.addressId)
+                                .then(resp => {
+                                    this.addresses.splice(index,1);
+                                    done();
+                                }
+                            );
+                        }).catch(_ => {});
+                },
+                showEdit(address,index){
+                    this.workarea = [];
+                    this.edit = true;
+                    this.index = index;
+                    leyou.http.get("/order/address/" + address.addressId)
+                        .then(resp => {
+                            this.address = resp.data;
+                            // 三级联动确定 省市县
+                            for(let i in this.options){
+                                if(this.options[i].label == this.address.receiverState){
+                                    this.workarea[0] = this.options[i].value;
+                                    this.showAddress[0] = this.options[i].label
+                                }
+                                for(let k in this.options[i].children){
+                                    if(this.options[i].children[k].label == this.address.receiverCity){
+                                        this.workarea[1] = this.options[i].children[k].value;
+                                        this.showAddress[1] = this.options[i].children[k].label
+                                    }
+                                    for(let j in this.options[i].children[k].children){
+                                        if(this.options[i].children[k].children[j].label == this.address.receiverDistrict){
+                                            this.workarea[2] = this.options[i].children[k].children[j].value;
+                                            this.showAddress[2] = this.options[i].children[k].children[j].label
+                                        }        
+                                    }
+                                }
+                            }
+                        }
+                    );
+                },
+                editStatus(address,index){
+                    leyou.http.put("/order/address/default/" + address.addressId)
+                        .then(resp => {
+                            for(let i in this.addresses){
+                                this.addresses[i].receiverDefault = 0;
+                            }
+                            this.addresses[index].receiverDefault = 1;
+                        }
+                    );
+                },
+                
+            },
+            watch:{
+                'workarea':{
+                    deep:true,
+                    handler(){
+                        for(let i in this.options){
+                            if(Number(this.options[i].value) == Number(this.workarea[0])){
+                                this.showAddress[0] = this.options[i].label
+                            }
+                            for(let k in this.options[i].children){
+                                if(Number(this.options[i].children[k].value) == Number(this.workarea[1])){
+                                    this.showAddress[1] = this.options[i].children[k].label
+                                }
+                                for(let j in this.options[i].children[k].children){
+                                    if(Number(this.options[i].children[k].children[j].value) == Number(this.workarea[2])){
+                                        this.showAddress[2] = this.options[i].children[k].children[j].label
+                                    }        
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        });
+    </script>
+
+</html>
