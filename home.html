@@ -158,7 +158,7 @@
                                     </td>
                                     <td width="10%" class="center" :rowspan="o.orderDetails.length" v-if="j === 0">
                                         <ul class="unstyled">
-                                            <li v-if="o.status === 1"><a href="#" class="sui-btn btn-info">立即付款</a></li>
+                                            <li v-if="o.status === 1"><a @click="doPay(o.orderId)" class="sui-btn btn-info">立即付款</a></li>
                                             <li v-if="o.status === 2"><a href="#" class="sui-btn btn-info">提醒发货</a></li>
                                             <li v-if="o.status === 3"><a href="#" class="sui-btn btn-info">确认收货</a></li>
                                             <li v-if="o.status === 3">4天23时后自动确认</li>
@@ -378,6 +378,9 @@
             formatPrice: ly.formatPrice,
             getTotalPrice(order){
                 return order.orderDetails.map(d => d.num * d.price).reduce((v1,v2) => v1 + v2, 0);
+            },
+            doPay(orderId){
+                window.location = "pay.html?orderId=" + orderId;
             }
         },
         watch:{
