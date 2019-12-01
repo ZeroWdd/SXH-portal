@@ -185,9 +185,7 @@
         methods: {
             createVerifyCode() {// 生成短信验证码
                 this.$validator.validate("phone").then(r => {
-                    console.log(r);
                     if (r) {
-                        console.log("66666")
                         leyou.http.post("/user/code", "phone=" + this.user.phone);
                     }
                 });
@@ -201,7 +199,7 @@
                             .then(resp => {
                                 if (resp.status === 201) {
                                     // 注册成功
-                                    alert("注册成功,即将跳转到登录页！");
+                                    // alert("注册成功,即将跳转到登录页！");
                                     setTimeout(() => window.location = '/login.html', 2000);
                                 }
                             })

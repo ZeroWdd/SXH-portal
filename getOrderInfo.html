@@ -39,7 +39,7 @@
           </div>
           <div class="step-cont">
             <div class="addressInfo">
-              <ul class="addr-detail">
+              <ul class="addr-detail" >
                 <li class="addr-item" v-for="(a,i) in addresses" :key="i">
                   <div>
                     <div :class="{con:true,name:true,selected:i === selectedAddress}"><a href="javascript:;"
@@ -235,6 +235,7 @@
             zipCode: "100000", // 邮编
             default: false
           }
+          
         ],
         addresses1:[],
         selectedAddress: 0,
@@ -254,6 +255,7 @@
             this.$Message.info("购物车为空");
           });
           ly.http.get("/order/address").then(({data}) => {
+              this.addresses = []
               data.forEach((address,i) => {
                 let json = {}
                 json.name = address.receiver;
@@ -305,8 +307,9 @@
             Object.assign(this.order, { orderDetails: orderDetails }, addr, { totalPay: this.totalPrice, actualPay: this.actualPrice });
 
             ly.http.post("/order/order", this.order).then(({ data }) => {
-              // console.log(data);
-              window.location = "http://www.leyou.com/pay.html?orderId=" + data;
+              window.location = "http://www.leyou.com/pay.html?orderId=" + data.orderId;
+            }).catch(() => {
+
             })
           }).catch(() => {
             window.location = "http://www.leyou.com/login.html?returnUrl=http://www.leyou.com/getOrderInfo.html"

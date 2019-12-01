@@ -107,6 +107,10 @@
 					
 					this.orderId = ly.getUrlParam("orderId");
           ly.http.get("/order/order/" + this.orderId).then(({data}) => {
+							if(data.status == 2){
+								// 已付款，无序付款
+								window.location = "http://www.leyou.com/paysuccess.html?orderPrice=" + data.totalPay;
+							}
               this.orderPrice = data.actualPay;
 					})
         }).catch(() => {
