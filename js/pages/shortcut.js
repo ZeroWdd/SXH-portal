@@ -3,7 +3,7 @@ const shortcut = {
     <div class='py-container'> \
         <div class='shortcut'> \
             <ul class='fl'> \
-               <li class='f-item'>乐优欢迎您！</li> \
+               <li class='f-item'>尚小惠欢迎您！</li> \
                <li class='f-item' v-if='user && user.username'>\
                尊敬的会员，<span style='color: red;'>{{user.username}}</span>\
                </li>\
@@ -15,13 +15,13 @@ const shortcut = {
            <ul class='fr'> \
                <li class='f-item'>我的订单</li> \
                <li class='f-item space'></li> \
-               <li class='f-item'><a href='home.html' target='_blank'>我的乐优</a></li> \
+               <li class='f-item'><a href='home.html' target='_blank'>我的尚小惠</a></li> \
                <li class='f-item space'></li> \
-               <li class='f-item'>乐优会员</li> \
+               <li class='f-item'>尚小惠会员</li> \
                <li class='f-item space'></li> \
                <li class='f-item'>企业采购</li> \
                <li class='f-item space'></li> \
-               <li class='f-item'>关注乐优</li> \
+               <li class='f-item'>关注尚小惠</li> \
                <li class='f-item space'></li> \
                <li class='f-item' id='service'> \
                    <span>客户服务</span> \
