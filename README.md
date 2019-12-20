@@ -18,7 +18,7 @@
 
 * 首先启动后端[SXH](https://github.com/ZeroWdd/leyou) 项目
 * 在本项目中运行`live-server  --port=9002 `
-* 修改本地`host`文件 将默认地址 http://localhost:9002 映射为 `www.leyou.com`
+* 修改本地`host`文件 将虚拟机地址 映射为 `www.leyou.com`
 * ~~需要配合后端https://github.com/ZeroWdd/SXH ，具体后端安装过程请跳转至后端项目~~
 
 ## 运行界面展示
