@@ -454,10 +454,7 @@
             rob(){
                 ly.http.get("/auth/verify").then(res=>{
                     ly.http.post("/seckill/order/"+this.seckill.id).then(res=>{
-                        this.$Message.success("恭喜你,抢购成功,m3秒后跳转支付页面");
-                        setTimeout(function (){
-                            window.location.href = "/pay.html"
-                        }, 3000);
+                        this.$Message.success("恭喜你,抢购成功,请前去订单界面支付");
                     }).catch((res)=>{
                         if(res.response.status === 403){
                             this.$Message.success("很遗憾,抢购失败,已售空");
